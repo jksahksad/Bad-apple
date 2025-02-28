@@ -54,8 +54,8 @@
                 const response = await fetch("bad_apple_ascii.txt");
                 const text = await response.text();
 
-                // Separar los frames por doble salto de línea
-                const frames = text.split("\n\n").map(frame => frame.trim()).filter(frame => frame);
+                // Separar los frames usando '###' como delimitador
+                const frames = text.split("###").map(frame => frame.trim()).filter(frame => frame);
 
                 let index = 0;
                 function showFrame() {
