@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reproducción de ASCII</title>
+    <title>Bad Apple ASCII</title>
     <style>
         body {
             background-color: black;
@@ -30,6 +30,16 @@
             line-height: 1.1;
         }
 
+        #start-btn {
+            background: white;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
         @media screen and (max-width: 600px) {
             #ascii {
                 font-size: min(3vw, 2vh);
@@ -40,33 +50,68 @@
 </head>
 <body>
 
-    <h2>Bad apple 🔥🔥🔥🔥/h2>
-    <pre id="ascii">Cargando muchacho...</pre>
+    <h2>Bad Apple en ASCII (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</h2>
+    <button id="start-btn">Iniciar Animación</button>
+    <pre id="ascii">Cargando...</pre>
+    <audio id="audio">
+        <source src="badapple.mp3" type="audio/mp3">
+        Tu navegador no soporta audio.
+    </audio>
 
     <script>
         async function loadASCII() {
             try {
+                console.log("Cargando archivos ASCII...");
+
+                // Cargar los dos archivos en paralelo
                 const responses = await Promise.all([
-                    fetch("./ascii_parte_1.txt"),
-                    fetch("./ascii_parte_2.txt")
+                    fetch("ascii_parte_1.txt"),
+                    fetch("ascii_parte_2.txt")
                 ]);
-                
+
+                // Verificar que ambos archivos se cargaron correctamente
+                responses.forEach(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error cargando ${response.url}, Status: ${response.status}`);
+                    }
+                });
+
+                // Convertir archivos a texto
                 const texts = await Promise.all(responses.map(res => res.text()));
 
+                // Dividir en frames usando '###' como separador
                 const frames = texts
-                    .flatMap(text => text.split(/=== IMAGEN \d+ ===/).map(frame => frame.trim()))
+                    .flatMap(text => text.split("###").map(frame => frame.trim()))
                     .filter(frame => frame);
 
+                console.log(`Se cargaron ${frames.length} frames.`);
+
                 let index = 0;
-                function showFrame() {
-                    document.getElementById("ascii").textContent = frames[index];
-                    index = (index + 1) % frames.length;
+                let startTime;
+                const frameRate = 1000 / 27; // Aproximadamente 27 FPS
+
+                function showFrame(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const elapsedTime = timestamp - startTime;
+
+                    if (elapsedTime >= frameRate * index) {
+                        document.getElementById("ascii").textContent = frames[index];
+                        index = (index + 1) % frames.length;
+                    }
+
+                    requestAnimationFrame(showFrame);
                 }
 
-                setInterval(showFrame, 36);
+                // Esperar a que el usuario inicie la animación
+                document.getElementById("start-btn").addEventListener("click", () => {
+                    document.getElementById("start-btn").style.display = "none";
+                    document.getElementById("audio").play();
+                    requestAnimationFrame(showFrame);
+                });
+
             } catch (error) {
-                document.getElementById("ascii").textContent = "Error cargando ASCII";
-                console.error("Error al cargar los archivos ASCII", error);
+                document.getElementById("ascii").textContent = "Error al cargar ASCII.";
+                console.error("Error al cargar los archivos ASCII:", error);
             }
         }
 
