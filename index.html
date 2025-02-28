@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,50 +9,72 @@
             background-color: black;
             color: white;
             font-family: monospace;
+            text-align: center;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             overflow: hidden;
         }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 10px;
-            line-height: 10px;
+
+        #ascii {
+            white-space: pre;
+            overflow-x: auto;
+            max-width: 100vw;
+            max-height: 90vh;
+            padding: 10px;
+            font-size: min(1.8vw, 2.2vh);
+            line-height: 1.1;
+        }
+
+        @media screen and (max-width: 600px) {
+            #ascii {
+                font-size: min(3vw, 2vh);
+                line-height: 1;
+            }
         }
     </style>
 </head>
 <body>
-    <pre id="ascii"></pre> 
-    <audio id="audio" loop>
+
+    <h2>Bad Apple en ASCII (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</h2>
+    <pre id="ascii">Cargando...</pre>
+    <audio id="audio" controls>
         <source src="badapple.mp3" type="audio/mp3">
+        Tu navegador no soporta audio.
     </audio>
 
     <script>
-        const asciiElement = document.getElementById('ascii');
-        const audioElement = document.getElementById('audio');
-        
-        
-        fetch('bad_apple_ascii.txt.gz')
-            .then(response => response.text())
-            .then(text => {
-                
-                const frames = text.split('\n\n'); 
-                
-                let frameIndex = 0;
+        async function loadASCII() {
+            try {
+                // Cargar el archivo ASCII
+                const response = await fetch("bad_apple_ascii.txt");
+                const text = await response.text();
 
-                // Función para mostrar los frames
+                // Separar los frames por doble salto de línea
+                const frames = text.split("\n\n").map(frame => frame.trim()).filter(frame => frame);
+
+                let index = 0;
                 function showFrame() {
-                    asciiElement.textContent = frames[frameIndex];
-                    frameIndex = (frameIndex + 1) % frames.length; // Ciclar entre los frames
+                    document.getElementById("ascii").textContent = frames[index];
+                    index = (index + 1) % frames.length;
                 }
 
-                // Iniciar la animación
-                setInterval(showFrame, 100); 
-                audioElement.play(); 
-            })
-            .catch(error => {
-                console.error('Error al cargar los frames:', error);
-            });
+                // Iniciar la animación y el audio sincronizados
+                const audioElement = document.getElementById("audio");
+                audioElement.onplay = () => setInterval(showFrame, 36);
+                
+            } catch (error) {
+                document.getElementById("ascii").textContent = "Error cargando ASCII";
+                console.error("Error al cargar el archivo ASCII", error);
+            }
+        }
+
+        loadASCII();
     </script>
+
 </body>
 </html>
