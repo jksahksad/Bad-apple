@@ -1,74 +1,58 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bad Apple en ASCII</title>
+    <title>Bad Apple ASCII</title>
     <style>
         body {
             background-color: black;
             color: white;
             font-family: monospace;
-            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
         pre {
-            font-size: 6px; /* Ajusta el tamaño del ASCII */
-            line-height: 6px;
-            white-space: pre;
-            overflow: hidden;
-            width: 80%;
-            margin: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 10px;
+            line-height: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Bad Apple en ASCII</h1>
-    <audio id="audio" src="badapple.mp3" controls></audio>
-    <pre id="ascii">Cargando frames...</pre>
+    <pre id="ascii"></pre> 
+    <audio id="audio" loop>
+        <source src="badapple.mp3" type="audio/mp3">
+    </audio>
 
     <script>
-        let asciiFrames = [];
-        let frameIndex = 0;
-        const fps = 30; // 30 FPS (ajusta si necesario)
+        const asciiElement = document.getElementById('ascii');
+        const audioElement = document.getElementById('audio');
+        
+        
+        fetch('bad_apple_ascii.txt')
+            .then(response => response.text())
+            .then(text => {
+                
+                const frames = text.split('\n\n'); 
+                
+                let frameIndex = 0;
 
-        function loadFrames() {
-            fetch('bad_apple_ascii.txt')
-                .then(response => {
-                    if (!response.ok) throw new Error("No se pudo cargar el archivo.");
-                    return response.text();
-                })
-                .then(text => {
-                    asciiFrames = text.split('\n###\n'); // Ajuste para separar bien los frames
-                    console.log(`Frames cargados: ${asciiFrames.length}`);
-                    startAnimation();
-                })
-                .catch(error => {
-                    console.error("Error cargando frames:", error);
-                    document.getElementById("ascii").textContent = "Error cargando los frames.";
-                });
-        }
-
-        function startAnimation() {
-            if (asciiFrames.length === 0) {
-                console.error("No se encontraron frames.");
-                return;
-            }
-
-            const pre = document.getElementById("ascii");
-            const audio = document.getElementById("audio");
-
-            function updateFrame() {
-                if (frameIndex < asciiFrames.length) {
-                    pre.textContent = asciiFrames[frameIndex++];
-                    setTimeout(updateFrame, 1000 / fps);
+                // Función para mostrar los frames
+                function showFrame() {
+                    asciiElement.textContent = frames[frameIndex];
+                    frameIndex = (frameIndex + 1) % frames.length; // Ciclar entre los frames
                 }
-            }
 
-            audio.play().catch(err => console.error("Error reproduciendo audio:", err));
-            updateFrame();
-        }
-
-        window.onload = loadFrames;
+                // Iniciar la animación
+                setInterval(showFrame, 100); 
+                audioElement.play(); 
+            })
+            .catch(error => {
+                console.error('Error al cargar los frames:', error);
+            });
     </script>
 </body>
 </html>
