@@ -23,9 +23,9 @@
         #ascii {
             white-space: pre;
             overflow: hidden; /* Elimina las barras de desplazamiento */
-            max-width: 100vw;
-            max-height: 90vh;
-            padding: 20px; /* Ajuste de padding para mejorar el aspecto */
+            max-width: 90vw;  /* Reducido para dejar espacio a los lados */
+            max-height: 80vh; /* Reducido para mejorar la visibilidad */
+            padding: 20px; /* Espacio extra alrededor del texto */
             font-size: min(1.8vw, 2.2vh);
             line-height: 1.1;
             text-align: left; /* Alineación de texto a la izquierda */
@@ -54,21 +54,11 @@
                     fetch("./ascii_parte_2.txt")   <!-- Actualizado el nombre del archivo -->
                 ]);
                 
-                // Verificar que los archivos se están cargando correctamente
-                console.log("Archivos cargados con éxito.");
-
                 const texts = await Promise.all(responses.map(res => res.text()));
-
-                // Depurar el contenido de los archivos cargados
-                console.log("Contenido de ascii_parte_1.txt:", texts[0]);
-                console.log("Contenido de ascii_parte_2.txt:", texts[1]);
 
                 const frames = texts
                     .flatMap(text => text.split(/=== IMAGEN \d+ ===/).map(frame => frame.trim()))
                     .filter(frame => frame);
-
-                // Verificar la cantidad de frames procesados
-                console.log("Total de frames:", frames.length);
 
                 let index = 0;
                 function showFrame() {
@@ -76,15 +66,14 @@
                     index = (index + 1) % frames.length;
                 }
 
-                // Reproducir los frames a 40 FPS (25 ms entre cada fotograma)
-                setInterval(showFrame, 25); // 40 FPS -> 25 ms entre fotogramas
+                // Reproducir los frames a 30 FPS (33 ms entre cada fotograma)
+                setInterval(showFrame, 33); // 30 FPS -> 33 ms entre fotogramas
             } catch (error) {
                 document.getElementById("ascii").textContent = "Error cargando ASCII";
                 console.error("Error al cargar los archivos ASCII", error);
             }
         }
 
-        // Cargar y reproducir la animación al iniciar
         loadASCII();
     </script>
 
