@@ -47,8 +47,8 @@
         async function loadASCII() {
             try {
                 const responses = await Promise.all([
-                    fetch("./ascii_parte_1.txt"),
-                    fetch("./ascii_parte_2.txt")
+                    fetch("./ascii_part_1.txt"),
+                    fetch("./ascii_part_2.txt")
                 ]);
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
@@ -63,8 +63,8 @@
                     index = (index + 1) % frames.length;
                 }
 
-                // Reproducir los frames a 28 FPS (35.7 ms entre cada fotograma)
-                setInterval(showFrame, 35.7); // 28 FPS -> 35.7 ms entre fotogramas
+                // Ajuste para 28 FPS -> 35.7 ms entre cada fotograma
+                setInterval(showFrame, 35.7);
             } catch (error) {
                 document.getElementById("ascii").textContent = "Error cargando ASCII";
                 console.error("Error al cargar los archivos ASCII", error);
