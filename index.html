@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,12 +17,12 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden; /* Elimina las barras de desplazamiento */
         }
 
         #ascii {
             white-space: pre;
-            overflow-x: auto;
+            overflow: hidden; /* Elimina las barras de desplazamiento */
             max-width: 100vw;
             max-height: 90vh;
             padding: 10px;
@@ -64,13 +63,15 @@
                     index = (index + 1) % frames.length;
                 }
 
-                setInterval(showFrame, 36);
+                // Reproducir los frames a 60 FPS (16.67 ms entre cada fotograma)
+                setInterval(showFrame, 16.67);
             } catch (error) {
                 document.getElementById("ascii").textContent = "Error cargando ASCII";
                 console.error("Error al cargar los archivos ASCII", error);
             }
         }
 
+        // Cargar y reproducir la animación al iniciar
         loadASCII();
     </script>
 
