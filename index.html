@@ -17,12 +17,12 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            overflow: hidden; /* Elimina cualquier barra lateral */
+            overflow: hidden; /* Elimina barras de desplazamiento */
         }
 
         #ascii {
             white-space: pre;
-            overflow: hidden; /* No hay barras de desplazamiento */
+            overflow: hidden; /* Sin barras de desplazamiento */
             max-width: 100vw;
             max-height: 90vh;
             padding: 10px;
@@ -41,8 +41,10 @@
 </head>
 <body>
 
-    <h2>Bad Apple 🔥🔥🔥🔥</h2>
-    <pre id="ascii">Cargando muchacho...</pre>
+    <h2>Bad Apple 🔥</h2>
+    <pre id="ascii">Cargando...</pre>
+
+    <!-- Agregar audio de fondo -->
     <audio id="audio" loop>
         <source src="badapple.mp3" type="audio/mp3">
         Tu navegador no soporta audio.
@@ -51,7 +53,6 @@
     <script>
         async function loadASCII() {
             try {
-                // Cargar los archivos de ASCII
                 const responses = await Promise.all([
                     fetch("./ascii_parte_1.txt"),
                     fetch("./ascii_parte_2.txt")
@@ -59,32 +60,28 @@
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
 
-                // Dividir los frames y eliminar las etiquetas de imagen
                 const frames = texts
                     .flatMap(text => text.split(/=== IMAGEN \d+ ===/).map(frame => frame.trim()))
                     .filter(frame => frame);
 
                 let index = 0;
-
                 function showFrame() {
                     document.getElementById("ascii").textContent = frames[index];
                     index = (index + 1) % frames.length;
                 }
 
-                // Reproducir la música tan pronto como la animación inicie
+                // Reproducir la música automáticamente cuando la animación comience
                 const audio = document.getElementById("audio");
-                audio.play(); // Reproducir música
+                audio.play(); // Iniciar la música
 
-                // Ejecutar la animación de los frames
-                setInterval(showFrame, 36); // 27 FPS (aproximadamente)
-
+                setInterval(showFrame, 36); // Mostrar frames a aproximadamente 27 FPS
             } catch (error) {
                 document.getElementById("ascii").textContent = "Error cargando ASCII";
                 console.error("Error al cargar los archivos ASCII", error);
             }
         }
 
-        // Cargar la animación de ASCII
+        // Iniciar la carga y reproducción de ASCII
         loadASCII();
     </script>
 
