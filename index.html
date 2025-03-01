@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproducción de ASCII</title>
     <style>
+        /* Estilo para el cuerpo de la página */
         body {
             background-color: black;
             color: white;
@@ -20,19 +21,17 @@
             overflow: hidden; /* Elimina barras de desplazamiento */
         }
 
+        /* Estilo para el contenedor de la animación */
         #ascii {
             white-space: pre;
-            overflow: hidden; /* Sin barras de desplazamiento */
+            overflow: hidden; /* Evita las barras de desplazamiento */
             max-width: 100vw;
             max-height: 90vh;
             padding: 10px;
             font-size: min(1.8vw, 2.2vh);
             line-height: 1.1;
-            text-align: center; /* Centrado de los frames */
-            margin: 0; /* Sin márgenes extra */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            text-align: center; /* Centra los frames */
+            margin: 0;
         }
 
         @media screen and (max-width: 600px) {
@@ -40,12 +39,6 @@
                 font-size: min(3vw, 2vh);
                 line-height: 1;
             }
-        }
-
-        h2 {
-            text-align: right; /* Título alineado a la derecha */
-            margin-right: 20px;
-            color: white;
         }
     </style>
 </head>
@@ -63,27 +56,16 @@
     <script>
         async function loadASCII() {
             try {
-                // Cargar los archivos ASCII
                 const responses = await Promise.all([
                     fetch("./ascii_part_1.txt"),
                     fetch("./ascii_part_2.txt")
                 ]);
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
-                
-                // Verificar que los textos se cargaron correctamente
-                console.log('Texto cargado:', texts);
 
                 const frames = texts
                     .flatMap(text => text.split(/=== IMAGEN \d+ ===/).map(frame => frame.trim()))
                     .filter(frame => frame);
-
-                console.log('Frames cargados:', frames); // Verificar que los frames están bien separados
-
-                if (frames.length === 0) {
-                    console.error("No se encontraron frames en los archivos.");
-                    return;
-                }
 
                 let index = 0;
                 function showFrame() {
@@ -103,8 +85,7 @@
             }
         }
 
-        // Iniciar la carga y reproducción de ASCII y música al mismo tiempo
-        window.onload = loadASCII; // Ejecuta la función de carga de ASCII cuando la página termine de cargar
+        loadASCII();
     </script>
 
 </body>
