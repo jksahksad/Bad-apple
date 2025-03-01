@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bad Apple ASCII</title>
+    <title>Reproducción de ASCII</title>
     <style>
         body {
             background-color: black;
@@ -17,28 +17,18 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden; /* Elimina cualquier barra lateral */
         }
 
         #ascii {
             white-space: pre;
-            overflow: hidden; /* Evita barras de desplazamiento */
+            overflow: hidden; /* No hay barras de desplazamiento */
             max-width: 100vw;
             max-height: 90vh;
             padding: 10px;
             font-size: min(1.8vw, 2.2vh);
-            line-height: 1.1; /* Mantiene alineación estable */
-            text-align: left; /* Mantiene alineación de los frames */
-        }
-
-        #start-btn {
-            background: white;
-            color: black;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            margin-top: 10px;
+            line-height: 1.1;
+            text-align: left; /* Alineación de texto */
         }
 
         @media screen and (max-width: 600px) {
@@ -51,10 +41,9 @@
 </head>
 <body>
 
-    <h2>Bad Apple en ASCII (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</h2>
-    <button id="start-btn">Iniciar Animación</button>
-    <pre id="ascii">Cargando...</pre>
-    <audio id="audio">
+    <h2>Bad Apple 🔥🔥🔥🔥</h2>
+    <pre id="ascii">Cargando muchacho...</pre>
+    <audio id="audio" loop>
         <source src="badapple.mp3" type="audio/mp3">
         Tu navegador no soporta audio.
     </audio>
@@ -62,62 +51,40 @@
     <script>
         async function loadASCII() {
             try {
-                console.log("Cargando archivos ASCII...");
-
-                // Cargar los dos archivos en paralelo
+                // Cargar los archivos de ASCII
                 const responses = await Promise.all([
-                    fetch("ascii_parte_1.txt"),
-                    fetch("ascii_parte_2.txt")
+                    fetch("./ascii_parte_1.txt"),
+                    fetch("./ascii_parte_2.txt")
                 ]);
-
-                // Verificar que ambos archivos se cargaron correctamente
-                responses.forEach(response => {
-                    if (!response.ok) {
-                        throw new Error(`Error cargando ${response.url}, Status: ${response.status}`);
-                    }
-                });
-
-                // Convertir archivos a texto
+                
                 const texts = await Promise.all(responses.map(res => res.text()));
 
-                // Dividir en frames usando '###' como separador y eliminar todas las etiquetas de imágenes
+                // Dividir los frames y eliminar las etiquetas de imagen
                 const frames = texts
-                    .flatMap(text => text.split("###").map(frame => 
-                        frame.replace(/---IMAGEN \d+---/g, "").trim() // Elimina todas las etiquetas de imágenes
-                    ))
+                    .flatMap(text => text.split(/=== IMAGEN \d+ ===/).map(frame => frame.trim()))
                     .filter(frame => frame);
 
-                console.log(`Se cargaron ${frames.length} frames.`);
-
                 let index = 0;
-                let startTime;
-                const frameRate = 1000 / 27; // Aproximadamente 27 FPS
 
-                function showFrame(timestamp) {
-                    if (!startTime) startTime = timestamp;
-                    const elapsedTime = timestamp - startTime;
-
-                    if (elapsedTime >= frameRate * index) {
-                        document.getElementById("ascii").textContent = frames[index];
-                        index = (index + 1) % frames.length;
-                    }
-
-                    requestAnimationFrame(showFrame);
+                function showFrame() {
+                    document.getElementById("ascii").textContent = frames[index];
+                    index = (index + 1) % frames.length;
                 }
 
-                // Esperar a que el usuario inicie la animación
-                document.getElementById("start-btn").addEventListener("click", () => {
-                    document.getElementById("start-btn").style.display = "none";
-                    document.getElementById("audio").play();
-                    requestAnimationFrame(showFrame);
-                });
+                // Reproducir la música tan pronto como la animación inicie
+                const audio = document.getElementById("audio");
+                audio.play(); // Reproducir música
+
+                // Ejecutar la animación de los frames
+                setInterval(showFrame, 36); // 27 FPS (aproximadamente)
 
             } catch (error) {
-                document.getElementById("ascii").textContent = "Error al cargar ASCII.";
-                console.error("Error al cargar los archivos ASCII:", error);
+                document.getElementById("ascii").textContent = "Error cargando ASCII";
+                console.error("Error al cargar los archivos ASCII", error);
             }
         }
 
+        // Cargar la animación de ASCII
         loadASCII();
     </script>
 
