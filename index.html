@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,12 +18,12 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            overflow: hidden; /* Elimina las barras de desplazamiento del body */
+            overflow: hidden;
         }
 
         #ascii {
             white-space: pre;
-            overflow: hidden; /* Elimina las barras de desplazamiento del contenedor de los frames */
+            overflow-x: auto;
             max-width: 100vw;
             max-height: 90vh;
             padding: 10px;
@@ -47,8 +48,8 @@
         async function loadASCII() {
             try {
                 const responses = await Promise.all([
-                    fetch("./ascii_parte_1.txt"),
-                    fetch("./ascii_parte_2.txt")
+                    fetch("./ascii_part_1.txt"),
+                    fetch("./ascii_part_2.txt")
                 ]);
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
