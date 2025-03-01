@@ -20,6 +20,13 @@
             overflow: hidden; /* Elimina barras de desplazamiento */
         }
 
+        h2 {
+            text-align: right; /* Alineación a la derecha para el título */
+            width: 100%;
+            margin: 0;
+            padding: 10px;
+        }
+
         #ascii {
             white-space: pre;
             overflow: hidden; /* Sin barras de desplazamiento */
@@ -30,6 +37,10 @@
             line-height: 1.1;
             text-align: left; /* Alineación de texto a la izquierda */
             margin: 0; /* Eliminar márgenes adicionales */
+            display: flex;
+            justify-content: center; /* Centrar contenido horizontalmente */
+            align-items: center; /* Centrar contenido verticalmente */
+            height: 90vh; /* Asegurar que ocupe la altura disponible */
         }
 
         @media screen and (max-width: 600px) {
