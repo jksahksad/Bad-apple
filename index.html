@@ -22,19 +22,24 @@
 
         #ascii {
             white-space: pre;
-            overflow: hidden; /* Eliminar el desplazamiento horizontal */
-            max-width: 100vw;
-            max-height: 90vh;
-            padding: 0; /* Sin padding extra */
-            font-size: min(1.8vw, 2.2vh);
+            overflow-x: auto;
+            max-width: 90vw;  /* Limitar el ancho a un 90% de la ventana */
+            max-height: 80vh; /* Limitar la altura a un 80% de la ventana */
+            padding: 10px;
+            font-size: min(1.8vw, 2.2vh);  /* Ajuste dinámico de la fuente */
             line-height: 1.1;
-            text-align: left; /* Alineación del texto */
+            text-align: left; /* Alineación de texto */
+            margin: 0; /* Sin márgenes extra */
+            width: 80ch; /* 80 caracteres de ancho */
+            height: 100ch; /* 100 caracteres de alto */
         }
 
         @media screen and (max-width: 600px) {
             #ascii {
                 font-size: min(3vw, 2vh);
                 line-height: 1;
+                width: 70ch; /* Ajustar el ancho a 70 caracteres en pantallas pequeñas */
+                height: 80ch; /* Ajustar el alto a 80 caracteres en pantallas pequeñas */
             }
         }
     </style>
@@ -64,8 +69,7 @@
                     index = (index + 1) % frames.length;
                 }
 
-                // Ajuste para 29 FPS -> 34.5 ms entre cada fotograma
-                setInterval(showFrame, 34.5);
+                setInterval(showFrame, 36);
             } catch (error) {
                 document.getElementById("ascii").textContent = "Error cargando ASCII";
                 console.error("Error al cargar los archivos ASCII", error);
