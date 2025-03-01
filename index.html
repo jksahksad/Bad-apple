@@ -17,20 +17,17 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            overflow: hidden; /* Elimina las barras de desplazamiento */
+            overflow: hidden;
         }
 
         #ascii {
             white-space: pre;
-            overflow: hidden; /* Elimina las barras de desplazamiento */
-            max-width: 90vw;  /* Reducido para dejar espacio a los lados */
-            max-height: 80vh; /* Reducido para mejorar la visibilidad */
-            padding: 20px; /* Espacio extra alrededor del texto */
+            overflow-x: auto;
+            max-width: 100vw;
+            max-height: 90vh;
+            padding: 10px;
             font-size: min(1.8vw, 2.2vh);
             line-height: 1.1;
-            text-align: left; /* Alineación de texto a la izquierda */
-            margin: 0; /* Sin márgenes extra */
-            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
         }
 
         @media screen and (max-width: 600px) {
@@ -50,8 +47,8 @@
         async function loadASCII() {
             try {
                 const responses = await Promise.all([
-                    fetch("./ascii_parte_1.txt"),  <!-- Actualizado el nombre del archivo -->
-                    fetch("./ascii_parte_2.txt")   <!-- Actualizado el nombre del archivo -->
+                    fetch("./ascii_parte_1.txt"),
+                    fetch("./ascii_parte_2.txt")
                 ]);
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
@@ -66,8 +63,8 @@
                     index = (index + 1) % frames.length;
                 }
 
-                // Reproducir los frames a 30 FPS (33 ms entre cada fotograma)
-                setInterval(showFrame, 33); // 30 FPS -> 33 ms entre fotogramas
+                // Reproducir los frames a 28 FPS (35.7 ms entre cada fotograma)
+                setInterval(showFrame, 35.7); // 28 FPS -> 35.7 ms entre fotogramas
             } catch (error) {
                 document.getElementById("ascii").textContent = "Error cargando ASCII";
                 console.error("Error al cargar los archivos ASCII", error);
