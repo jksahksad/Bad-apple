@@ -20,27 +20,19 @@
             overflow: hidden; /* Elimina barras de desplazamiento */
         }
 
-        h2 {
-            text-align: right; /* Alineación a la derecha para el título */
-            width: 100%;
-            margin: 0;
-            padding: 10px;
-        }
-
         #ascii {
             white-space: pre;
             overflow: hidden; /* Sin barras de desplazamiento */
             max-width: 100vw;
             max-height: 90vh;
-            padding: 0; /* Sin relleno */
+            padding: 10px;
             font-size: min(1.8vw, 2.2vh);
             line-height: 1.1;
-            text-align: left; /* Alineación de texto a la izquierda */
-            margin: 0; /* Eliminar márgenes adicionales */
+            text-align: center; /* Centrado de los frames */
+            margin: 0; /* Sin márgenes extra */
             display: flex;
-            justify-content: center; /* Centrar contenido horizontalmente */
-            align-items: center; /* Centrar contenido verticalmente */
-            height: 90vh; /* Asegurar que ocupe la altura disponible */
+            justify-content: center;
+            align-items: center;
         }
 
         @media screen and (max-width: 600px) {
@@ -48,6 +40,12 @@
                 font-size: min(3vw, 2vh);
                 line-height: 1;
             }
+        }
+
+        h2 {
+            text-align: right; /* Título alineado a la derecha */
+            margin-right: 20px;
+            color: white;
         }
     </style>
 </head>
@@ -65,19 +63,22 @@
     <script>
         async function loadASCII() {
             try {
+                // Cargar los archivos ASCII
                 const responses = await Promise.all([
-                    fetch("./ascii_parte_1.txt"),
-                    fetch("./ascii_parte_2.txt")
+                    fetch("./ascii_part_1.txt"),
+                    fetch("./ascii_part_2.txt")
                 ]);
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
-
-                // Verificar que los archivos fueron cargados correctamente
+                
+                // Verificar que los textos se cargaron correctamente
                 console.log('Texto cargado:', texts);
 
                 const frames = texts
                     .flatMap(text => text.split(/=== IMAGEN \d+ ===/).map(frame => frame.trim()))
                     .filter(frame => frame);
+
+                console.log('Frames cargados:', frames); // Verificar que los frames están bien separados
 
                 if (frames.length === 0) {
                     console.error("No se encontraron frames en los archivos.");
