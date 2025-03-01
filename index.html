@@ -80,10 +80,10 @@
                 // Convertir archivos a texto
                 const texts = await Promise.all(responses.map(res => res.text()));
 
-                // Dividir en frames usando '###' como separador y limpiar "---IMAGEN X---"
+                // Dividir en frames usando '###' como separador y eliminar todas las etiquetas de imágenes
                 const frames = texts
                     .flatMap(text => text.split("###").map(frame => 
-                        frame.replace(/---IMAGEN \d+---/g, "").trim() // Quitar todas las etiquetas de imágenes
+                        frame.replace(/---IMAGEN \d+---/g, "").trim() // Elimina todas las etiquetas de imágenes
                     ))
                     .filter(frame => frame);
 
