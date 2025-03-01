@@ -48,8 +48,8 @@
         async function loadASCII() {
             try {
                 const responses = await Promise.all([
-                    fetch("./ascii_part_1.txt"),
-                    fetch("./ascii_part_2.txt")
+                    fetch("./ascii_parte_1.txt"),
+                    fetch("./ascii_parte_2.txt")
                 ]);
                 
                 const texts = await Promise.all(responses.map(res => res.text()));
