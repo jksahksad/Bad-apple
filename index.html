@@ -22,12 +22,13 @@
 
         #ascii {
             white-space: pre;
-            overflow-x: auto;
+            overflow: hidden; /* Evita barras de desplazamiento */
             max-width: 100vw;
             max-height: 90vh;
             padding: 10px;
             font-size: min(1.8vw, 2.2vh);
-            line-height: 1.1;
+            line-height: 1.1; /* Mantiene alineación estable */
+            text-align: left; /* Mantiene alineación de los frames */
         }
 
         #start-btn {
@@ -50,7 +51,7 @@
 </head>
 <body>
 
-        <h2>Bad apple 🔥🔥🔥🔥</h2>
+    <h2>Bad Apple en ASCII (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</h2>
     <button id="start-btn">Iniciar Animación</button>
     <pre id="ascii">Cargando...</pre>
     <audio id="audio">
@@ -79,9 +80,11 @@
                 // Convertir archivos a texto
                 const texts = await Promise.all(responses.map(res => res.text()));
 
-                // Dividir en frames usando '###' como separador
+                // Dividir en frames usando '###' como separador y limpiar "---IMAGEN X---"
                 const frames = texts
-                    .flatMap(text => text.split("###").map(frame => frame.trim()))
+                    .flatMap(text => text.split("###").map(frame => 
+                        frame.replace(/---IMAGEN \d+---/g, "").trim() // Quitar todas las etiquetas de imágenes
+                    ))
                     .filter(frame => frame);
 
                 console.log(`Se cargaron ${frames.length} frames.`);
